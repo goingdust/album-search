@@ -1,4 +1,6 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+
+import axios from "axios";
 
 import SearchBar from "components/SearchBar";
 import Results from "components/Results";
@@ -6,6 +8,16 @@ import Results from "components/Results";
 export default function LiveSearch(props) {
   const [term, setTerm] = useState("");
   const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const searchURL = `https://itunes.apple.com/search?term=${term}&country=CA&media=music&entity=album&attribute=artistTerm`;
+    axios
+      .get(searchURL)
+      .then(res => {
+        console.log(res.data.results);
+        setResults([...res.data.results]);
+      });
+  }, [term]);
 
   return (
     <Fragment>
